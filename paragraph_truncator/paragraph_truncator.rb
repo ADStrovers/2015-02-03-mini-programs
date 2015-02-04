@@ -1,4 +1,6 @@
 require 'pry'
+require 'active_support'
+require 'active_support/core_ext/string/filters'
 
 class ParagraphTruncator
   
@@ -7,8 +9,10 @@ class ParagraphTruncator
     @trunc_text = ""
   end
   
-  def truncate(size = 100, insert = "...")
-    @trunc_text = @text.slice[size, @text.length] + insert
+  def truncate_text(size = 100)
+    @trunc_text = @text.truncate(size)
   end
     
 end
+
+binding.pry

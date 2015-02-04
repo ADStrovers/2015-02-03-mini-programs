@@ -1,40 +1,41 @@
+require 'active_support'
 require 'pry'
 
 class PhoneNumberFormatter
-
+  
+  include ActiveSupport::NumberHelper
+  
   def initialize
-    get_phone_number
+    @options = {}
   end
   
   def get_phone_number
-    puts "Please enter a valid 10 digit phone number."
+    puts "Please enter a valid 7 or 10 digit phone number."
     phone_number = gets.chomp
     validate_length(phone_number)
   end
   
-  def format_byteslice
-    puts "(#{@phone_number.byteslice(0, 3)}) #{@phone_number.byteslice(3, 3)}-#{@phone_number.byteslice(6, 4)}"
-  end
-  
-  def format_array
-    pn_array = @phone_number.split(//)
-    pn_array.insert(6, "-").insert(3, ") ").insert(0, "(")
-    puts pn_array.join
+  def format
+    get_phone_number
+    puts number_to_phone(@phone_number, @options)
   end
   
   private
   
   def validate_length(string)
-    if string.length != 10
+    if string.length != 10 && string.length != 7
       puts "I'm sorry, that phone number is not 10 digits long."
       get_phone_number
     else
       @phone_number = string
+      if string.length == 10
+        @options[:area_code] = true
+      end
     end
   end
   
 end
 
 test = PhoneNumberFormatter.new
-test.format_byteslice
-test.format_array
+
+test.format
